@@ -4,8 +4,8 @@
   "description": "Simple API to display LaTeX math functions, as stunning visual graphs.",
   "main": "server.mjs",
   "scripts": {
-    "postinstall": "npx playwright install chromium ",
-    "start": "CI=false node server.mjs"
+    "start": "node server.mjs",
+    "postinstall": "npx playwright install chromium"
   },
   "keywords": [],
   "author": "Keaton",

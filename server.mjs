@@ -1,72 +1,89 @@
-import { chromium } from "playwright";
-import fs from "fs";
-import http from "http";
+import { chromium } from 'playwright';
 
-const defaultGraph = "y=x^2";
-const defaultBounds = {
-  left: -20,
-  right: 20,
-  bottom: -20,
-  top: 20,
-};
-const app = http.createServer((req, res) => {
-  console.log("Request received", req.url);
-  // res.writeHead(200, { "Content-Type": "text/plain" });
-  // res.end("Hello There\n");
-  // call generateGraphImage with the request and the graph data, only if post request, have error handling
-  if (req.method === "POST") {
-    let body = "";
-    req.on("data", (chunk) => {
-      body += chunk.toString();
-    });
-    req.on("end", async () => {
-      let graphData = defaultGraph;
-      let graphBounds = defaultBounds;
-      try {
-        const parsedBody = JSON.parse(body);
-        if (parsedBody.graph) {
-          graphData = parsedBody.graph;
-        }
-        if (parsedBody.bounds) {
-          graphBounds = parsedBody.bounds;
-        }
-      } catch (error) {
-        console.error("Error parsing request body:", error);
-      }
-
-      const screenshot = await generateGraphImage(req, graphData, graphBounds);
-      if (typeof screenshot === "string") {
-        res.writeHead(200, { "Content-Type": "text/html" });
-        res.end(screenshot);
-      } else {
-        res.writeHead(200, { "Content-Type": "image/png" });
-        res.end(screenshot);
-      }
-    });
-  } else {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end(`
-      <form method="post">
-        <label for="graph">Graph:</label>
-        <input type="text" id="graph" name="graph" value="${defaultGraph}" />
-        <br />
-        <br />
-        <button type="submit">Generate Graph</button>
-      </form>
-    `);
-  }
-}).listen(3000);
-console.log("Listening on port 3000")
-
-async function generateGraphImage(req, graphData, graphBounds) {
-  console.log("Playwright starting...!");
+(async () => {
+  console.log("! STARTING PLAYWRIGHT!");
   const browser = await chromium.launch({
+    headless: true,
+    executablePath: process.env.PLAYWRIGHT_BROWSERS_PATH || undefined,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
-  console.log("Playwright launched successfully!");
+  console.log("✅ Playwright launched successfully!");
   await browser.close();
-  console.log("Playwright closed successfully!");
-}
+  console.log("✅ Playwright closed successfully!");
+})();
+
+
+
+// import { chromium } from "playwright";
+// import fs from "fs";
+// import http from "http";
+
+// const defaultGraph = "y=x^2";
+// const defaultBounds = {
+//   left: -20,
+//   right: 20,
+//   bottom: -20,
+//   top: 20,
+// };
+// const app = http.createServer((req, res) => {
+//   console.log("Request received", req.url);
+//   // res.writeHead(200, { "Content-Type": "text/plain" });
+//   // res.end("Hello There\n");
+//   // call generateGraphImage with the request and the graph data, only if post request, have error handling
+//   if (req.method === "POST") {
+//     let body = "";
+//     req.on("data", (chunk) => {
+//       body += chunk.toString();
+//     });
+//     req.on("end", async () => {
+//       let graphData = defaultGraph;
+//       let graphBounds = defaultBounds;
+//       try {
+//         const parsedBody = JSON.parse(body);
+//         if (parsedBody.graph) {
+//           graphData = parsedBody.graph;
+//         }
+//         if (parsedBody.bounds) {
+//           graphBounds = parsedBody.bounds;
+//         }
+//       } catch (error) {
+//         console.error("Error parsing request body:", error);
+//       }
+
+//       const screenshot = await generateGraphImage(req, graphData, graphBounds);
+//       if (typeof screenshot === "string") {
+//         res.writeHead(200, { "Content-Type": "text/html" });
+//         res.end(screenshot);
+//       } else {
+//         res.writeHead(200, { "Content-Type": "image/png" });
+//         res.end(screenshot);
+//       }
+//     });
+//   } else {
+//     res.writeHead(200, { "Content-Type": "text/html" });
+//     res.end(`
+//       <form method="post">
+//         <label for="graph">Graph:</label>
+//         <input type="text" id="graph" name="graph" value="${defaultGraph}" />
+//         <br />
+//         <br />
+//         <button type="submit">Generate Graph</button>
+//       </form>
+//     `);
+//   }
+// }).listen(3000);
+// console.log("Listening on port 3000")
+
+// async function generateGraphImage(req, graphData, graphBounds) {
+//   console.log("Playwright starting...!");
+//   const browser = await chromium.launch({
+//     headless: true,
+//     args: ['--no-sandbox', '--disable-setuid-sandbox']
+//   });
+//   console.log("Playwright launched successfully!");
+//   await browser.close();
+//   console.log("Playwright closed successfully!");
+// }
 
 // async function generateGraphImage(req, graphData, graphBounds) {
 
