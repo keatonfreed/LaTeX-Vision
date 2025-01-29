@@ -21,7 +21,7 @@ const app = http.createServer((req, res) => {
   console.log("Request received", req.url);
   res.writeHead(200, { "Content-Type": "text/plain" });
   res.end("Hello There\n");
-}).listen(3000);
+}).listen(process.env.PORT || 3000);
 
 // const defaultGraph = "y=x^2";
 // const defaultBounds = {

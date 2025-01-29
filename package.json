@@ -8,5 +8,9 @@
   },
   "keywords": [],
   "author": "Keaton",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": "20.x"
+  },
+  "type": "module"
 }
