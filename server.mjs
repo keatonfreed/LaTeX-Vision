@@ -1,27 +1,17 @@
-// import { chromium } from 'playwright';
-
-// (async () => {
-//   console.log("! STARTING PLAYWRIGHT!");
-//   const browser = await chromium.launch({
-//     headless: true,
-//     executablePath: process.env.PLAYWRIGHT_BROWSERS_PATH || undefined,
-//     args: ['--no-sandbox', '--disable-setuid-sandbox']
-//   });
-//   console.log("✅ Playwright launched successfully!");
-//   await browser.close();
-//   console.log("✅ Playwright closed successfully!");
-// })();
-
-
 
 import { chromium } from "playwright";
 import fs from "fs";
-import http from "http";
-// const app = http.createServer((req, res) => {
-//   console.log("Request received", req.url);
-//   res.writeHead(200, { "Content-Type": "text/plain" });
-//   res.end("Hello There\n");
-// }).listen(process.env.PORT || 3000);
+import express from "express";
+
+
+const app = express();
+//any middleware that should be used for safety or cors or anything, should eb open to all api, and only the one method
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET");
+  next();
+});
+
 
 const defaultGraph = "y=x^2";
 const defaultBounds = {
@@ -30,76 +20,36 @@ const defaultBounds = {
   bottom: -20,
   top: 20,
 };
-const app = http.createServer((req, res) => {
-  console.log("Request received", req.url);
-  // res.writeHead(200, { "Content-Type": "text/plain" });
-  // res.end("Hello There\n");
-  // call generateGraphImage with the request and the graph data, only if post request, have error handling
-  if (req.method === "POST") {
-    let body = "";
-    req.on("data", (chunk) => {
-      body += chunk.toString();
-    });
-    req.on("end", async () => {
-      let graphData = defaultGraph;
-      let graphBounds = defaultBounds;
-      try {
-        const parsedBody = JSON.parse(body);
-        if (parsedBody.graph) {
-          graphData = parsedBody.graph;
-        }
-        if (parsedBody.bounds) {
-          graphBounds = parsedBody.bounds;
-        }
-      } catch (error) {
-        console.error("Error parsing request body:", error);
-      }
 
-      const screenshot = await generateGraphImage(req, graphData, graphBounds);
-      if (typeof screenshot === "string") {
-        res.writeHead(200, { "Content-Type": "text/html" });
-        res.end(screenshot);
-      } else {
-        res.writeHead(200, { "Content-Type": "image/png" });
-        res.end(screenshot);
-      }
-    });
+//express app, like the http server, but takes only get request, with params graph, and bounds. it uses default values if not provided, and then if so for bounds it is a json object with left, right, top, bottom stringifued, and graph is a string 
+app.get("/", async (req, res) => {
+  const graphData = req.query.graph || defaultGraph;
+  const graphBounds = req.query.bounds ? JSON.parse(req.query.bounds) : defaultBounds;
+  console.log("Request received", req.query.graph, req.query.bounds);
+  const screenshot = await generateGraphImage(req, graphData, graphBounds);
+  if (typeof screenshot === "string") {
+    res.send(screenshot);
   } else {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end(`
-      <form method="post">
-        <label for="graph">Graph:</label>
-        <input type="text" id="graph" name="graph" value="${defaultGraph}" />
-        <br />
-        <br />
-        <button type="submit">Generate Graph</button>
-      </form>
-    `);
+    res.writeHead(200, { "Content-Type": "image/png" });
+    res.end(screenshot);
   }
-}).listen(process.env.PORT || 3000);
-console.log("Listening on port 3000")
+});
 
-// async function generateGraphImage(req, graphData, graphBounds) {
-//   console.log("Playwright starting...!");
-//   const browser = await chromium.launch({
-//     headless: true,
-//     args: ['--no-sandbox', '--disable-setuid-sandbox']
-//   });
-//   console.log("Playwright launched successfully!");
-//   await browser.close();
-//   console.log("Playwright closed successfully!");
-// }
+// app listen on port env port or 3000
+app.listen(process.env.PORT || 3000);
+
+console.log("Listening on main port", process.env.PORT || 3000);
 
 async function generateGraphImage(req, graphData, graphBounds) {
 
   let chromiumPath = chromium.executablePath();
-  console.log("Using Chromium executable path:", chromiumPath);
+  // console.log("Using Chromium executable path:", chromiumPath);
 
   if (!fs.existsSync(chromiumPath)) {
     console.error("Chromium executable not found:", chromiumPath);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Chromium executable not found." }),
+      body: JSON.stringify({ error: "Server Error." }),
     };
   }
 
@@ -145,16 +95,9 @@ async function generateGraphImage(req, graphData, graphBounds) {
 
   await browser.close();
 
-  // return {
-  //   statusCode: 200,
-  //   headers: { "Content-Type": "image/png" },
-  //   body: "data:image/png;base64," + screenshot.toString("base64"),
-  // };
-  //that works for sending json, but just rend real image
-  // return screenshot;
-  //that works for downlaodng image, but not for rendering, this is the correct way to get if its a web page asking it wil just show the image 
-  // return `<img style="max-height:100%" src="data:image/png;base64,${screenshot.toString("base64")}" />`;
-  //works great for web pages, but if called inside an image from another page it will not work, this fixes it so it detects what and send sth right one
+  // if (req.headers.accept && req.headers.accept.includes("image/*")) {
+  // fix the if statement to check if the request is for an image like in an img tag
+  // console.log(req.headers.accept)
   if (req.headers.accept && req.headers.accept.includes("image/*")) {
     return screenshot;
   } else {
