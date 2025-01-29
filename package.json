@@ -2,9 +2,9 @@
   "name": "latexvision",
   "version": "1.0.0",
   "description": "Simple API to display LaTeX math functions, as stunning visual graphs.",
-  "main": "server.js",
+  "main": "server.mjs",
   "scripts": {
-    "start": "CI=false node server.js"
+    "start": "CI=false node server.mjs"
   },
   "keywords": [],
   "author": "Keaton",

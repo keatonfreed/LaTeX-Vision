@@ -1,28 +1,20 @@
-import { createServer } from 'http';
-
-createServer((req, res) => {
-  res.write('Hello World!');
-  res.end();
-}).listen(3000);
-
-
 // import { chromium } from "playwright";
-// import fs from "fs";
-// import http from "http";
+import fs from "fs";
+import http from "http";
 
-// // const defaultGraph = "y=x^2";
-// // const defaultBounds = {
-// //   left: -20,
-// //   right: 20,
-// //   bottom: -20,
-// //   top: 20,
-// // };
-// const app = http.createServer((req, res) => {
-//   console.log("Request received", req.url);
-//   res.writeHead(200, { "Content-Type": "text/plain" });
-//   res.end("Hello World\n");
-// }).listen(3030);
-// console.log("Listening on port 3030")
+const defaultGraph = "y=x^2";
+const defaultBounds = {
+  left: -20,
+  right: 20,
+  bottom: -20,
+  top: 20,
+};
+const app = http.createServer((req, res) => {
+  console.log("Request received", req.url);
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello There\n");
+}).listen(3000);
+console.log("Listening on port 3000")
 
 // async function generateGraphImage(req, graphData, graphBounds) {
 
