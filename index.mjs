@@ -11,6 +11,7 @@ const defaultBounds = {
   bottom: -20,
   top: 20,
 };
+
 app.get("/", async (req, res) => {
   const graphData = req.query.graphData || defaultGraph;
   const graphBounds = req.query.graphBounds || defaultBounds;
