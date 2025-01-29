@@ -1,22 +1,27 @@
-import { chromium } from 'playwright';
+// import { chromium } from 'playwright';
 
-(async () => {
-  console.log("! STARTING PLAYWRIGHT!");
-  const browser = await chromium.launch({
-    headless: true,
-    executablePath: process.env.PLAYWRIGHT_BROWSERS_PATH || undefined,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
-  console.log("✅ Playwright launched successfully!");
-  await browser.close();
-  console.log("✅ Playwright closed successfully!");
-})();
+// (async () => {
+//   console.log("! STARTING PLAYWRIGHT!");
+//   const browser = await chromium.launch({
+//     headless: true,
+//     executablePath: process.env.PLAYWRIGHT_BROWSERS_PATH || undefined,
+//     args: ['--no-sandbox', '--disable-setuid-sandbox']
+//   });
+//   console.log("✅ Playwright launched successfully!");
+//   await browser.close();
+//   console.log("✅ Playwright closed successfully!");
+// })();
 
 
 
 // import { chromium } from "playwright";
 // import fs from "fs";
-// import http from "http";
+import http from "http";
+const app = http.createServer((req, res) => {
+  console.log("Request received", req.url);
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello There\n");
+}).listen(3000);
 
 // const defaultGraph = "y=x^2";
 // const defaultBounds = {
