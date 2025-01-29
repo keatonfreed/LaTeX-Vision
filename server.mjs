@@ -69,7 +69,7 @@ async function generateGraphImage(req, graphData, graphBounds) {
   }
   const page = await browser.newPage();
 
-  page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
+  // page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
   page.on("pageerror", (err) => console.log("PAGE ERROR:", err.message));
 
   console.log("Generating graph image for", graphData, JSON.stringify(graphData), graphBounds);
@@ -94,7 +94,7 @@ async function generateGraphImage(req, graphData, graphBounds) {
     </html>
   `);
 
-  await page.waitForTimeout(1000); // 1s delay
+  // await page.waitForTimeout(1000); // 1s delay
   const graph = await page.$("#graph");
   const screenshot = await graph.screenshot();
 
