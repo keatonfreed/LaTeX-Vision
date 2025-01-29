@@ -69,6 +69,7 @@ async function generateGraphImage(req, graphData, graphBounds) {
   const page = await browser.newPage();
 
 
+  console.log("Generating graph image for", graphData, JSON.stringify(graphData), graphBounds);
   await page.setContent(`
     <!DOCTYPE html>
     <html>
