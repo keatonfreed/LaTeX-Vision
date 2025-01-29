@@ -1,27 +1,20 @@
 // import { chromium } from "playwright";
 // import fs from "fs";
-import express from "express";
+import http from "http";
 
-const app = express();
-
-const defaultGraph = "y=x^2";
-const defaultBounds = {
-  left: -20,
-  right: 20,
-  bottom: -20,
-  top: 20,
-};
-
-app.get("/", async (req, res) => {
-  // const graphData = req.query.graphData || defaultGraph;
-  // const graphBounds = req.query.graphBounds || defaultBounds;
-  // const graphImage = await generateGraphImage(req, graphData, graphBounds);
-  // res.send(graphImage);
-  res.send('hey there');
-});
-app.listen(3000, () => {
-  console.log("Server listening on port 3000");
-});
+// const defaultGraph = "y=x^2";
+// const defaultBounds = {
+//   left: -20,
+//   right: 20,
+//   bottom: -20,
+//   top: 20,
+// };
+const app = http.createServer((req, res) => {
+  console.log("Request received", req.url);
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Hello World\n");
+}).listen(3030);
+console.log("Listening on port 3030")
 
 // async function generateGraphImage(req, graphData, graphBounds) {
 
