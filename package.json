@@ -4,7 +4,7 @@
   "description": "Simple API to display LaTeX math functions, as stunning visual graphs.",
   "main": "index.mjs",
   "scripts": {
-    "start": "npx playwright install-deps && node index.mjs",
+    "start": "node index.mjs",
     "dev": "nodemon index.mjs"
   },
   "keywords": [],
