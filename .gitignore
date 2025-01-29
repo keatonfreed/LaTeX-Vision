@@ -1,0 +1,6 @@
+# nodejs ignores
+node_modules
+npm-debug.log
+# OS ignores
+.DS_Store
+Thumbs.db

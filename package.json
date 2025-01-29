@@ -1,0 +1,17 @@
+{
+  "name": "latexvision",
+  "version": "1.0",
+  "description": "Simple API to display LaTeX math functions, as stunning visual graphs.",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "npx playwright install-deps && node index.mjs",
+    "dev": "nodemon index.mjs"
+  },
+  "keywords": [],
+  "author": "Keaton",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "playwright": "^1.50.0"
+  }
+}
