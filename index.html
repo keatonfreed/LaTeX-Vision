@@ -1,0 +1,222 @@
+<html>
+
+<head>
+    <title>Graph API</title>
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #121212;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            padding: 0 5vw;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: fit-content;
+            max-width: 100%;
+            /* min-width: 1000px; */
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: absolute;
+            top: 20px;
+            padding: 0 40px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #00bcd4;
+        }
+
+        .corner-box {
+            background: #00bcd4;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #121212;
+            cursor: pointer;
+        }
+
+        .corner-box a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .main-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-top: 80px;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-align: left;
+            width: 100%;
+        }
+
+        .example {
+            font-size: 20px;
+            font-weight: 600;
+            background: #1e88e5;
+            padding: 15px;
+            border-radius: 10px;
+            width: fit-content;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+
+        .example a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .api-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background: #1e1e1e;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .endpoint {
+            font-size: 22px;
+            font-weight: 700;
+            color: #00bcd4;
+            margin-bottom: 12px;
+        }
+
+        .api-section .list {
+            list-style: none;
+            margin-top: 15px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+
+            gap: 10px
+        }
+
+        li {
+            font-size: 14px;
+            padding: 10px 25px;
+            /* background: rgba(255, 255, 255, 0.08); */
+            border-block: 1px solid rgba(255, 255, 255, 0.08);
+            /* border-radius: 8px; */
+            margin: 5px 0;
+        }
+
+        .inbetween {
+            font-size: 18px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #80cbc4;
+            margin: -0.8rem 0;
+        }
+
+        .top {
+            border-top-color: #00bcd4;
+        }
+
+        .bottom {
+            border-bottom-color: #00bcd4;
+        }
+
+        .api-wrapper {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .api-section {
+            min-width: 1000px;
+        }
+
+        .api-section code {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: #80cbc4;
+            font-weight: 600;
+            margin-inline: 5px;
+
+            a {
+                color: currentColor;
+                text-decoration: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <div class="title">LaTeX Vision API</div>
+            <div class="corner-box"><a href="/api/v1/?graph=y=x^2" target="_blank">Try it</a></div>
+        </div>
+
+        <div class="main-title">Generate Graph Images from LaTeX</div>
+
+        <div class="api-wrapper">
+            <div class="api-section">
+                <div class="endpoint">GET <code><a href="/api/v1/" target="_blank">/api/v1/</a></code></div>
+                <p>Available Parameters:</p>
+                <div class="list">
+                    <div>
+                        <li class="top"><code>graph</code>: (string, optional) Function to graph. Default:
+                            <code><a target="_blank" href="/api/v1">y=x^2</a></code>
+                        </li>
+                        <div class="inbetween">or</div>
+                        <li class="bottom"><code>graphs</code>: (array, optional) Multiple functions to graph. Example:
+                            <code><a target="_blank" href='/api/v1?graphs=["y=1/4x^2%2B3","y=-|x^2-9|","2\\sqrt{|x|}"]'>["y=x^2"]</a></code>
+                        </li>
+                    </div>
+                    <div>
+                        <li class="top"><code>bounds</code>: (object, optional) Graph limits. Default:
+                            <code><a target="_blank" href='/api/v1?bounds={"left":-5,"right":30,"top":30,"bottom":-5}'>{"left":-20,"right":20,"top":20,"bottom":-20}</a></code>
+                        </li>
+                        <div class="inbetween">or</div>
+                        <li class="bottom"><code>left</code>,<code>right</code>,<code>top</code>,<code>bottom</code>:
+                            (number, optional)
+                            Individual graph limits.
+                            Example:<code><a target="_blank" href="/api/v1?left=-25&top=50">?left=-25&top=50</a></code>
+                        </li>
+                    </div>
+                    <div>
+                        <li class="top"><code>width</code>: (number, optional) Image width. Default:
+                            <code><a target="_blank" href="/api/v1?width=600">400</a></code>
+                        </li>
+                        <li class="bottom"><code>height</code>: (number, optional) Image height. Default:
+                            <code><a target="_blank" href="/api/v1?height=250">400</a></code>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
