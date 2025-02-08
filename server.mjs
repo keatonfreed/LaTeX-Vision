@@ -11,7 +11,18 @@ function cleanGraphLatex(input) {
   let output = input;
   // Check if an assignment (`=`, `<`, `>`, `<=`, `>=`) already exists
   if (!/[=<>]/.test(input)) {
-    output = "y=" + output
+    if (input.includes("y") && !input.includes("x")) {
+      output = "x=" + output
+    } else {
+      output = "y=" + output
+    }
+  }
+
+  // Add backslash before trigonometric functions if missing
+  const trigFuncs = ['sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'arcsin', 'arccos', 'arctan'];
+  for (const func of trigFuncs) {
+    const regex = new RegExp(`(?<!\\\\)${func}`, 'g');
+    output = output.replace(regex, `\\${func}`);
   }
 
   output = output.replace(/\|/g, (match, offset, fullString) => {
@@ -84,7 +95,7 @@ function getImageAsHtml(imageLink) {
 
         <head>
           <title>LaTeX Vision Output</title>
-          <link rel="icon" type="image/png" href="/icon.png" />
+          <link rel="icon" type="image/png" href="/favicon.png" />
         </head>
 
         <body style="height:100%;display:flex;align-items:center;justify-content:center;background:rgb(14,14,14)">
@@ -121,8 +132,8 @@ app.get("/defaultGraph.png", async (req, res) => {
   res.sendFile(process.cwd() + '/defaultGraph.png');
 });
 
-app.get("/icon.png", async (req, res) => {
-  res.sendFile(process.cwd() + '/icon.png');
+app.get("/favicon.png", async (req, res) => {
+  res.sendFile(process.cwd() + '/favicon.png');
 });
 //express app, like the http server, but takes only get request, with params graph, and bounds. it uses default values if not provided, and then if so for bounds it is a json object with left, right, top, bottom stringifued, and graph is a string 
 app.get("/api/v1/", async (req, res) => {
